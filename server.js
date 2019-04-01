@@ -30,11 +30,22 @@ server.post('/api/register', async (req, res) => {
 
 })
 
+server.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+    const user = await Users.findBy({ username }).first()
+    try {
+        if (user && bcrypt.compareSync(password, user.password)) {
+            res.status(200).json({ message: `Welcome ${user.username}` })
+        } else {
+            res.status(401).json({ message: "login failed" })
+        }    
+    } catch(err) {
+        res.status(400).json({ error: err})
+    } 
+})
 
 
-// server.post('/api/login', (req, res) => {
 
-// })
 // server.get('/api/users', (req, res) => {
 
 // })
