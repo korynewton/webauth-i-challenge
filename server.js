@@ -45,10 +45,34 @@ server.post('/api/login', async (req, res) => {
 })
 
 
+async function restrict(req, res, next) {
+    const { username, password } = req.headers;
+    try {
+        const user = await Users.findBy({ username }).first()
+        if (user && bcrypt.compareSync(password, user.password)) {
+            next()
+        }
+        else {
+            res.status(404).json({message: "you shall not pass!"})
+        }
+    } catch {
+        res.status(500).json({ error: "error in looking up user" })
+    }
+}
 
-// server.get('/api/users', (req, res) => {
 
-// })
+server.get('/api/users', restrict, async (req, res) => {
+    try {
+        const users = await Users.find();
+        if (users) {
+            res.status(200).json(users)
+        } else {
+            res.status(404).json({ message: "no users" })
+        }
+    } catch {
+        res.status(500).json({ error: "error in retrieving users" })
+    }
+})
 
 
 module.exports = server;
