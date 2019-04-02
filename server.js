@@ -6,7 +6,7 @@ const SessionStore = require('connect-session-knex')(session);
 const knexConfig = require('./data/dbConfig')
 
 const loginRoute = require('./auth/login-routes')
-// const logoutRoute = require('./auth/logout-routes')
+const logoutRoute = require('./auth/logout-routes');
 const registerRoute = require('./auth/register-routes');
 const usersRoute = require('./users/usersRoutes');
 
@@ -42,7 +42,7 @@ server.get('/', (req, res) => {
 })
 
 server.use('/api/auth/login', loginRoute)
-// server.use('/api/logout', logoutRoute)
+server.use('/api/auth/logout', logoutRoute)
 server.use('/api/auth/register', registerRoute)
 server.use('/api/users', usersRoute)
 
