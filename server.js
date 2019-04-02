@@ -21,8 +21,8 @@ server.post('/api/register', async (req, res) => {
     
     user.password = hash;
 
-    const added = await Users.add(user);
     try {
+        const added = await Users.add(user);
         res.status(200).json(added)
     } catch {
         res.status(400).json( { message: "error" })
@@ -32,8 +32,8 @@ server.post('/api/register', async (req, res) => {
 
 server.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
-    const user = await Users.findBy({ username }).first()
     try {
+        const user = await Users.findBy({ username }).first()
         if (user && bcrypt.compareSync(password, user.password)) {
             res.status(200).json({ message: `Welcome ${user.username}` })
         } else {
